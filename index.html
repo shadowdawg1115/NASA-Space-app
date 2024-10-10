@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stellify - Create a New Constellation</title>
     <style>
         body {
@@ -22,6 +21,25 @@
         }
         .hidden {
             display: none;
+        }
+        /* Dropdown styles */
+        #my-constellations-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 150px;
+            background-color: #1c1e26;
+            border: 1px solid #3c4053;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+        #my-constellations-dropdown a {
+            display: block;
+            padding: 8px 16px;
+            color: white;
+            text-decoration: none;
+        }
+        #my-constellations-dropdown a:hover {
+            background-color: #3c4053;
         }
     </style>
     <link
@@ -46,7 +64,9 @@
                 <div class="flex flex-1 justify-end gap-8">
                     <div class="flex items-center gap-9">
                         <a class="text-white text-sm font-medium leading-normal" href="#">Explore</a>
-                        <a class="text-white text-sm font-medium leading-normal" href="#">My Constellations</a>
+                        <a class="text-white text-sm font-medium leading-normal" href="#" id="my-constellations-btn">My Constellations</a>
+                        <!-- Dropdown Menu -->
+                        <div id="my-constellations-dropdown" class="hidden"></div>
                     </div>
                     <button
                         class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#193be6] text-white text-sm font-bold leading-normal tracking-[0.015em]"
@@ -85,7 +105,7 @@
                         </label>
                     </div>
 
-                    <!-- Added line-color input element -->
+                    <!-- Line color input element -->
                     <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
                         <label class="flex flex-col min-w-40 flex-1">
                             <p class="text-white text-base font-medium leading-normal pb-2">Line color</p>
@@ -108,33 +128,27 @@
                                 class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#3c4053] bg-[#1c1e26] focus:border-[#3c4053] h-14 placeholder:text-[#9da2b8] p-[15px] text-base font-normal leading-normal">
                         </label>
                     </div>
-                    <div class="flex px-4 py-3">
+                    <div class="flex px-4 py-3 gap-2">
                         <button id="undo-btn"
-                            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 flex-1 bg-[#292b38] text-white text-sm font-bold leading-normal tracking-[0.015em]">
+                            class="flex min-w-[84px] max-w-[240px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 flex-1 bg-[#292b38] text-white text-sm font-bold leading-normal tracking-[0.015em]">
                             <span class="truncate">Undo</span>
                         </button>
-                    </div>
-                    <div class="flex px-4 py-3">
                         <button id="redo-btn"
-                            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 flex-1 bg-[#292b38] text-white text-sm font-bold leading-normal tracking-[0.015em]">
+                            class="flex min-w-[84px] max-w-[240px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 flex-1 bg-[#292b38] text-white text-sm font-bold leading-normal tracking-[0.015em]">
                             <span class="truncate">Redo</span>
                         </button>
                     </div>
-                    <div class="flex px-4 py-3">
+                    <div class="flex px-4 py-3 gap-2">
                         <button id="save-btn"
-                            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 flex-1 bg-[#193be6] text-white text-sm font-bold leading-normal tracking-[0.015em]">
+                            class="flex min-w-[84px] max-w-[240px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 flex-1 bg-[#193be6] text-white text-sm font-bold leading-normal tracking-[0.015em]">
                             <span class="truncate">Save constellation</span>
                         </button>
-                    </div>
-                    <div class="flex px-4 py-3">
                         <button id="export-svg-btn"
-                            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 flex-1 bg-[#193be6] text-white text-sm font-bold leading-normal tracking-[0.015em]">
+                            class="flex min-w-[84px] max-w-[240px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 flex-1 bg-[#193be6] text-white text-sm font-bold leading-normal tracking-[0.015em]">
                             <span class="truncate">Export as SVG</span>
                         </button>
-                    </div>
-                    <div class="flex px-4 py-3">
                         <button id="export-png-btn"
-                            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 flex-1 bg-[#193be6] text-white text-sm font-bold leading-normal tracking-[0.015em]">
+                            class="flex min-w-[84px] max-w-[240px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 flex-1 bg-[#193be6] text-white text-sm font-bold leading-normal tracking-[0.015em]">
                             <span class="truncate">Export as PNG</span>
                         </button>
                     </div>
@@ -146,8 +160,9 @@
         </div>
     </div>
 
+    <!-- JavaScript Code -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() { // Ensures the DOM is loaded before executing the script
+        document.addEventListener('DOMContentLoaded', function() {
             async function fetchExoplanets() {
                 try {
                     const response = await fetch('/exoplanets');
@@ -211,33 +226,24 @@
                     let lines = [];
                     let redoStack = [];
 
-                    function handleStarClick(event) {
+                    function handleStarClick(event, d) {
                         const coords = [d3.select(this).attr('cx'), d3.select(this).attr('cy')];
                         points.push(coords);
 
-                        console.log('Star clicked at:', coords);  // Debugging line
-
-                        const lineColorElement = document.getElementById('line-color');
-                        const lineWidthElement = document.getElementById('line-width');
-
-                        if (points.length > 1 && lineColorElement && lineWidthElement) {
-                            const lineColor = lineColorElement.value;
-                            const lineWidth = lineWidthElement.value;
+                        if (points.length > 1) {
+                            const lineColor = document.getElementById('line-color').value;
+                            const lineWidth = document.getElementById('line-width').value;
 
                             const line = g.append('line')
                                 .attr('x1', points[points.length - 2][0])
                                 .attr('y1', points[points.length - 2][1])
                                 .attr('x2', points[points.length - 1][0])
                                 .attr('y2', points[points.length - 1][1])
-                                .attr('class', 'constellation-line')
                                 .attr('stroke', lineColor)
                                 .attr('stroke-width', lineWidth);
 
                             lines.push(line);
-                            redoStack = [];  // Clear the redo stack on new action
-                            console.log('Line drawn:', line.node());  // Debugging line
-                        } else {
-                            console.error('Could not find necessary input elements or not enough points to draw a line.');
+                            redoStack = [];  // Clear redo stack
                         }
                     }
 
@@ -255,11 +261,11 @@
                             const line = redoStack.pop();
                             g.node().appendChild(line.node());
                             lines.push(line);
-                            points.push([line.attr('x2'), line.attr('y2')]);  // Restore the last point
+                            points.push([line.attr('x2'), line.attr('y2')]);
                         }
                     });
 
-                    document.getElementById('save-btn').addEventListener('click', () => {
+                    document.getElementById('save-btn').addEventListener('click', async () => {
                         if (lines.length > 0) {
                             const constellationName = prompt('Enter a name for your constellation:');
                             if (constellationName) {
@@ -267,21 +273,85 @@
                                     x1: line.attr('x1'),
                                     y1: line.attr('y1'),
                                     x2: line.attr('x2'),
-                                    y2: line.attr('y2')
+                                    y2: line.attr('y2'),
+                                    color: line.attr('stroke'),
+                                    width: line.attr('stroke-width')
                                 }));
 
-                                console.log({
-                                    name: constellationName,
-                                    data: constellationData
+                                const response = await fetch('/save_constellation', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ name: constellationName, data: constellationData })
                                 });
 
-                                alert(`Constellation "${constellationName}" saved!`);
+                                const result = await response.json();
+                                alert(result.message);
                             }
                         } else {
                             alert('No lines to save!');
                         }
                     });
 
+                    // Fetch and display saved constellations
+                    document.getElementById('my-constellations-btn').addEventListener('click', async () => {
+                        try {
+                            const response = await fetch('/get_constellations');
+                            const savedConstellations = await response.json();
+                            const dropdown = document.getElementById('my-constellations-dropdown');
+
+                            dropdown.innerHTML = '';
+                            savedConstellations.forEach(constellation => {
+                                const option = document.createElement('a');
+                                option.href = '#';
+                                option.textContent = constellation.name;
+                                option.addEventListener('click', () => {
+                                    loadSavedConstellation(constellation);
+                                    dropdown.classList.add('hidden'); // Hide dropdown after selection
+                                });
+                                dropdown.appendChild(option);
+                            });
+
+                            dropdown.classList.toggle('hidden'); // Toggle dropdown visibility
+                        } catch (error) {
+                            console.error('Error fetching constellations:', error);
+                        }
+                    });
+
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', (event) => {
+                        const dropdown = document.getElementById('my-constellations-dropdown');
+                        const btn = document.getElementById('my-constellations-btn');
+                        if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
+                            dropdown.classList.add('hidden');
+                        }
+                    });
+
+                    // Load saved constellation
+                    function loadSavedConstellation(constellation) {
+                        const data = constellation.data;
+                        const width = document.getElementById('star-chart-container').clientWidth;
+                        const height = 600;
+
+                        const svg = d3.select('#star-chart').html('')
+                            .append('svg')
+                            .attr('width', width)
+                            .attr('height', height)
+                            .style('background-color', document.getElementById('bg-color').value);
+
+                        const g = svg.append('g');
+
+                        data.forEach(lineData => {
+                            g.append('line')
+                                .attr('x1', lineData.x1)
+                                .attr('y1', lineData.y1)
+                                .attr('x2', lineData.x2)
+                                .attr('y2', lineData.y2)
+                                .attr('stroke', lineData.color || '#FFFF00')
+                                .attr('stroke-width', lineData.width || 2);
+                        });
+                    }
+
+                    // Export as SVG
                     document.getElementById('export-svg-btn').addEventListener('click', () => {
                         try {
                             const svgElement = document.querySelector('#star-chart svg');
@@ -302,15 +372,13 @@
                             document.body.appendChild(downloadLink);
                             downloadLink.click();
                             document.body.removeChild(downloadLink);
-
-                            console.log('Export SVG successful');
-
                         } catch (error) {
                             console.error('Error exporting SVG:', error);
                             alert('Failed to export the image. Please try again.');
                         }
                     });
 
+                    // Export as PNG
                     document.getElementById('export-png-btn').addEventListener('click', () => {
                         try {
                             const svgElement = document.querySelector('#star-chart svg');
@@ -343,16 +411,22 @@
                                 document.body.appendChild(downloadLink);
                                 downloadLink.click();
                                 document.body.removeChild(downloadLink);
-
-                                console.log('Export PNG successful');
                             };
-
                         } catch (error) {
                             console.error('Error exporting PNG:', error);
                             alert('Failed to export the image. Please try again.');
                         }
                     });
 
+                    // Update background color and star size dynamically
+                    document.getElementById('bg-color').addEventListener('input', () => {
+                        svg.style('background-color', document.getElementById('bg-color').value);
+                    });
+
+                    document.getElementById('star-size').addEventListener('input', () => {
+                        const newSize = document.getElementById('star-size').value;
+                        g.selectAll('circle').attr('r', newSize);
+                    });
                 } catch (error) {
                     console.error('Error fetching stars:', error);
                 }
