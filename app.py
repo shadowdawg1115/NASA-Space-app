@@ -1,20 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Aug 28 22:53:01 2024
-
-@author: Dell
-"""# -*- coding: utf-8 -*-
-"""
-Created on Wed Aug 28 22:00:31 2024
-
-@author: Dell
-"""
-
-# app.py
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
+import json
 import random
 
 app = Flask(__name__)
+constellations = []
 
 # Mock dataset of exoplanets
 exoplanets = [
@@ -33,7 +22,6 @@ def get_exoplanets():
 
 @app.route('/stars/<exoplanet>', methods=['GET'])
 def get_stars(exoplanet):
-    # For now, we generate random stars
     stars = []
     for i in range(50):
         star = {
@@ -44,14 +32,15 @@ def get_stars(exoplanet):
         stars.append(star)
     return jsonify(stars)
 
+@app.route('/save_constellation', methods=['POST'])
+def save_constellation():
+    data = request.json
+    constellations.append(data)
+    return jsonify({'message': 'Constellation saved successfully!'})
+
+@app.route('/get_constellations', methods=['GET'])
+def get_constellations():
+    return jsonify(constellations)
+
 if __name__ == '__main__':
-    app.run(debug=True)
-@app.route('/stars/<exoplanet>', methods=['GET'])
-def get_stars1(exoplanet):
-    # Mock data - replace with real star positions
-    stars = [
-        {"name": "Alpha Centauri", "right_ascension": 14.66, "declination": -60.83},
-        {"name": "Betelgeuse", "right_ascension": 5.92, "declination": 7.41},
-        # Add more real data here...
-    ]
-    return jsonify(stars)
+    app.run(debug=True, use_reloader=False)
